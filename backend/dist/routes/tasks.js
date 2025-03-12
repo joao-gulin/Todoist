@@ -14,6 +14,24 @@ router.get('/task', async (req, res) => {
     const tasks = await prisma.task.findMany();
     res.json(tasks);
 });
+// Get a single task by the id
+router.get('/task/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Try to find the task on the id
+        const singleTask = await prisma.task.findUnique({
+            where: { id: Number(id) }
+        });
+        // If the task is not found
+        if (!singleTask) {
+            res.status(404).json({ message: "Task not found" });
+        }
+        res.json(singleTask);
+    }
+    catch (error) {
+        res.status(500).json({ message: "Failed to find the task" });
+    }
+});
 // Post for creating a new task with zod validation
 router.post('/task', async (req, res) => {
     try {
