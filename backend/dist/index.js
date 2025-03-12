@@ -13,10 +13,12 @@ const taskSchema = zod_1.z.object({
     title: zod_1.z.string().min(1, 'Title for the task is required'),
     description: zod_1.z.string().min(1, 'Description for the task is required'),
 });
+// Get for all the data in the Api
 app.get('/task', async (req, res) => {
     const tasks = await prisma.task.findMany();
     res.json(tasks);
 });
+// Post for creating a new task with zod validation
 app.post('/task', async (req, res) => {
     try {
         taskSchema.parse(req.body); // Validate request body
@@ -33,6 +35,26 @@ app.post('/task', async (req, res) => {
         else {
             res.status(500).json({ error: 'Failed to create user' });
         }
+    }
+});
+// Delete for deleting a task
+app.delete('/task/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Attempt to delete the task with the given ID
+        const deletedTask = await prisma.task.delete({
+            where: { id: Number(id) },
+        });
+        // If the task was not found, respond with a 404 status
+        if (!deletedTask) {
+            res.status(404).json({ message: 'Task not found' });
+        }
+        // Respond with the deleted task data
+        res.json(deletedTask);
+    }
+    catch (error) {
+        // Handle any errors that occur during the delete operation
+        res.status(500).json({ error: 'Failed to delete task' });
     }
 });
 const PORT = process.env.PORT || 3000;
