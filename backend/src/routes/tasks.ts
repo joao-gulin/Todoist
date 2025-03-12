@@ -5,6 +5,7 @@ import { number, z } from 'zod'
 const prisma = new PrismaClient()
 const router = Router()
 
+// Schema validations with zod for the title & description of the task
 const taskSchema = z.object({
   title: z.string().min(1, 'Title for the task is required'),
   description: z.string().min(1, 'Description for the task is required'),
