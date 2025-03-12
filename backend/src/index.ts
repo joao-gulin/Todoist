@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express"
+import express from "express"
 import { PrismaClient } from '@prisma/client'
 
 const app = express()
@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 
 app.use(express.json())
 
-app.get('/task', async (req: Request, res: Response) => {
+app.get('/task', async (req, res) => {
   const tasks = await prisma.task.findMany()
   res.json(tasks)
 })

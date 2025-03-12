@@ -12,7 +12,7 @@ app.get('/task', async (req, res) => {
     const tasks = await prisma.task.findMany();
     res.json(tasks);
 });
-app.post('/users', async (req, res) => {
+app.post('/task', async (req, res) => {
     const { title, description } = req.body;
     const task = await prisma.task.create({
         data: { title, description },
