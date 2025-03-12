@@ -1,20 +1,26 @@
 import express, { Request, Response } from "express"
-import cors from 'cors'
-import { connectToDatabase } from "./db"
+import { PrismaClient } from '@prisma/client'
 
 const app = express()
-const port = process.env.PORT || 5000
+const prisma = new PrismaClient()
 
-app.use(cors())
 app.use(express.json())
 
-app.get('/', async (req: Request, res: Response) => {
-  const db = await connectToDatabase()
-  const collection = db.collection('todo')
-  const data = await collection.find().toArray()
-  res.json(data)
+app.get('/task', async (req: Request, res: Response) => {
+  const tasks = await prisma.task.findMany()
+  res.json(tasks)
 })
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
+app.post('/task', async (req, res) => {
+  const { title, description } = req.body
+  const task = await prisma.task.create({
+    data: { title, description },
+  })
+  res.json(task)
+})
+
+
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`)
 })
