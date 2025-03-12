@@ -5,19 +5,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
+const zod_1 = require("zod");
 const app = (0, express_1.default)();
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
+const taskSchema = zod_1.z.object({
+    title: zod_1.z.string().min(1, 'Title for the task is required'),
+    description: zod_1.z.string().min(1, 'Description for the task is required'),
+});
 app.get('/task', async (req, res) => {
     const tasks = await prisma.task.findMany();
     res.json(tasks);
 });
 app.post('/task', async (req, res) => {
-    const { title, description } = req.body;
-    const task = await prisma.task.create({
-        data: { title, description },
-    });
-    res.json(task);
+    try {
+        taskSchema.parse(req.body); // Validate request body
+        const { title, description } = req.body;
+        const newTask = await prisma.task.create({
+            data: { title, description },
+        });
+        res.status(201).json(newTask);
+    }
+    catch (error) {
+        if (error instanceof zod_1.z.ZodError) {
+            res.status(400).json(error.errors);
+        }
+        else {
+            res.status(500).json({ error: 'Failed to create user' });
+        }
+    }
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
