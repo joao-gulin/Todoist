@@ -18,6 +18,19 @@ class TaskAPI {
       throw error;
     }
   }
+
+  async postTask(title: string, description: string) {
+    try {
+      const response = await apiClient.post<Task>('/task', {
+        title,
+        description,
+      })
+      return response.data
+    } catch (error) {
+      console.error('Error posting new task:', error)
+      throw error
+    }
+  }
 }
 
 const taskAPI = new TaskAPI()
