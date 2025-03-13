@@ -4,3 +4,8 @@ export interface Task {
   description: string
   completed: boolean
 }
+
+export interface NewTask {
+  title: string
+  description: string
+}
