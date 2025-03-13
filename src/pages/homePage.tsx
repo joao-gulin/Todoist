@@ -14,10 +14,12 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import seeTasks from "@/hooks/useTask"
+import seeTasks, { addTask } from "@/hooks/useTask"
+import { toast } from "sonner"
 
 export default function HomePage() {
   const { data = [], error, isLoading } = seeTasks()
+  const { mutate } = addTask()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [open, setOpen] = useState(false)
@@ -32,14 +34,22 @@ export default function HomePage() {
   
   // Event handler to trigger the mutation
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const newTask: NewTask = {
-      title: title,
-      description: description
+    if (!title || !description) {
+      toast.error("Error on the creation", {
+        description: "Please don't leave the title or the description empty"
+      })
+    } else {
+      e.preventDefault()
+      const newTask: NewTask = {
+        title: title,
+        description: description
+      }
+      mutate(newTask)
+      setOpen(false)
+      setTitle('')
+      setDescription('')
+      toast.success("Task Created Sucessfully")
     }
-    mutation.mutate(newTask)
-    setTitle('')
-    setDescription('')
   }
 
   if (isLoading) {
