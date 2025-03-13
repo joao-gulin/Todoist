@@ -72,5 +72,22 @@ router.delete('/task/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to delete task' });
     }
 });
+// Put for changing the state of the task from false to true and vice versa
+router.put('/task/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Attempt to edit the the task with the given ID
+        const editedTask = await prisma.task.update({
+            where: { id: Number(id) },
+            data: { completed: true }
+        });
+        // Respond with the put task data
+        res.json(editedTask);
+    }
+    catch (error) {
+        // Handle any errors that occurs
+        res.status(500).json({ error: 'Failed to put task' });
+    }
+});
 exports.default = router;
 //# sourceMappingURL=tasks.js.map
