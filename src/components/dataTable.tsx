@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "./ui/button"
 import { Trash2 } from "lucide-react"
+import { removeTask } from "@/hooks/useTask"
 
 interface Tasks {
   id: number,
@@ -26,6 +27,8 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
+  const { mutate: deleteTask} = removeTask()
+
   return (
     <Table>
       <TableHeader>
@@ -44,9 +47,11 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
             <TableCell>{task.description}</TableCell>
             <TableCell>{task.completed ? 'Yes' : 'No' }</TableCell>
             <TableCell>
-              <Button 
-              variant="outline" 
+              <Button
+              type="button"
+              variant="destructive"
               className="cursor-pointer"
+              onClick={() => deleteTask(task.id)}
               >
                 <Trash2 />
               </Button>

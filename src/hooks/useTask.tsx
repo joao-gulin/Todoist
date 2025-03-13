@@ -1,6 +1,7 @@
 import taskAPI from "@/api/task";
 import type { NewTask, Task } from "@/api/types";
 import { QueryClient, useMutation, useQuery, type UseMutateFunction, type UseQueryResult } from "@tanstack/react-query";
+const queryClient = new QueryClient() 
 
 export default function seeTasks(): UseQueryResult<Task[], Error> {
   return useQuery({ 
@@ -10,7 +11,6 @@ export default function seeTasks(): UseQueryResult<Task[], Error> {
 }
 
 export function addTask() {
-  const queryClient = new QueryClient() 
   return useMutation({
     mutationFn: (newTask: NewTask) => taskAPI.postTask(newTask.title, newTask.description),
     onSuccess: () => {
@@ -24,7 +24,6 @@ export function addTask() {
 }
 
 export function removeTask() {
-  const queryClient = new QueryClient()
   return useMutation({
     mutationFn: (taskId: number) => taskAPI.deleteTask(taskId),
     onSuccess: () => {
