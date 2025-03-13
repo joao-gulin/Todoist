@@ -1,10 +1,22 @@
+import taskAPI from "@/api/task"
 import DataTable from "@/components/dataTable"
 import { Button } from "@/components/ui/button"
 import useTask from "@/hooks/useTask"
+import { useMutation } from "@tanstack/react-query"
 import { CirclePlus } from 'lucide-react'
 
 export default function HomePage() {
   const { data = [], error, isLoading } = useTask()
+  const mutation = useMutation({
+    mutationFn: taskAPI.postTask(),
+    onSuccess: (data) => {
+      console.log('Task created successfully', data)
+    },
+    onError: (error) => {
+      // Handle errors
+      console.error('Error creating task', error)
+    }
+  })
 
   if (isLoading) {
     return <div>Loading..</div>

@@ -1,12 +1,6 @@
 import axios from 'axios'
 import apiClient from './apiClient'
-
-interface Task {
-  id: number
-  title: string
-  description: string
-  completed: boolean
-}
+import type { Task } from './types';
 
 class TaskAPI {
   async getTasks(): Promise<Task[]> {
