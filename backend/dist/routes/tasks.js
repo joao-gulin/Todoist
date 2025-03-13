@@ -5,6 +5,7 @@ const client_1 = require("@prisma/client");
 const zod_1 = require("zod");
 const prisma = new client_1.PrismaClient();
 const router = (0, express_1.Router)();
+// Schema validations with zod for the title & description of the task
 const taskSchema = zod_1.z.object({
     title: zod_1.z.string().min(1, 'Title for the task is required'),
     description: zod_1.z.string().min(1, 'Description for the task is required'),

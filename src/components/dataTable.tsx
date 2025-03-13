@@ -19,7 +19,11 @@ interface Tasks {
   completed: boolean,
 }
 
-const DataTable: React.FC<Tasks> = ({ id, title, description, completed }) => {
+interface DataTableProps {
+  tasks?: Tasks[]
+}
+
+const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
   return (
     <Table>
       <TableCaption>A list of your tasks</TableCaption>
@@ -32,12 +36,14 @@ const DataTable: React.FC<Tasks> = ({ id, title, description, completed }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell>{id}</TableCell>
-          <TableCell>{title}</TableCell>
-          <TableCell>{description}</TableCell>
-          <TableCell>{completed}</TableCell>    
-        </TableRow> 
+        {tasks?.map((task) => (
+          <TableRow key={task.id}>
+            <TableCell>{task.id}</TableCell>
+            <TableCell>{task.title}</TableCell>
+            <TableCell>{task.description}</TableCell>
+            <TableCell>{task.completed}</TableCell>    
+          </TableRow>         
+        ))} 
       </TableBody>
     </Table>
   )
