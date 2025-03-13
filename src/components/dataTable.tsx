@@ -11,6 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "./ui/button"
+import { Trash2 } from "lucide-react"
 
 interface Tasks {
   id: number,
@@ -40,7 +42,15 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
             <TableCell>{task.id}</TableCell>
             <TableCell>{task.title}</TableCell>
             <TableCell>{task.description}</TableCell>
-            <TableCell>{task.completed ? 'Yes' : 'No' }</TableCell>    
+            <TableCell>{task.completed ? 'Yes' : 'No' }</TableCell>
+            <TableCell>
+              <Button 
+              variant="outline" 
+              className="cursor-pointer"
+              >
+                <Trash2 />
+              </Button>
+            </TableCell>    
           </TableRow>         
         ))} 
       </TableBody>

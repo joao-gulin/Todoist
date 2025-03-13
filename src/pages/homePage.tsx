@@ -24,10 +24,12 @@ export default function HomePage() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [open, setOpen] = useState(false)
+  // Mutation for when we add a new task on the dialog
   const mutation = useMutation({
     mutationFn: (newTask: NewTask) => taskAPI.postTask(newTask.title, newTask.description),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['tasks']})
+      console.log('Success:', data)
       setOpen(false)
     },
     onError: (error) => {
@@ -52,6 +54,8 @@ export default function HomePage() {
       description: description
     }
     mutation.mutate(newTask)
+    setTitle('')
+    setDescription('')
   }
 
   if (isLoading) {
