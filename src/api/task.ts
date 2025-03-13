@@ -25,6 +25,16 @@ class TaskAPI {
       throw error
     }
   }
+
+  async deleteTask(taskId: number) {
+    try {
+      const response = await apiClient.delete<Task>(`/task/${taskId}`)
+      return response.data
+    } catch (error) {
+      console.error('Error deleting new task:', error)
+      throw error
+    }
+  }
 }
 
 const taskAPI = new TaskAPI()
