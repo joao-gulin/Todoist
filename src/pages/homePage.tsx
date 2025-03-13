@@ -1,8 +1,5 @@
-import taskAPI from "@/api/task"
 import DataTable from "@/components/dataTable"
 import { Button } from "@/components/ui/button"
-import useTask from "@/hooks/useTask"
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { CirclePlus } from 'lucide-react'
 import { NewTask } from "@/api/types"
 import {
@@ -17,27 +14,14 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
+import seeTasks from "@/hooks/useTask"
 
 export default function HomePage() {
-  const queryClient = useQueryClient()
-  const { data = [], error, isLoading } = useTask()
+  const { data = [], error, isLoading } = seeTasks()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [open, setOpen] = useState(false)
-  // Mutation for when we add a new task on the dialog
-  const mutation = useMutation({
-    mutationFn: (newTask: NewTask) => taskAPI.postTask(newTask.title, newTask.description),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['tasks']})
-      console.log('Success:', data)
-      setOpen(false)
-    },
-    onError: (error) => {
-      // Handle errors
-      console.error('Error creating task', error)
-    }
-  })
-
+  
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setTitle(e.target.value)
   }

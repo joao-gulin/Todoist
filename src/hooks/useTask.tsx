@@ -1,16 +1,25 @@
 import taskAPI from "@/api/task";
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+import type { NewTask, Task } from "@/api/types";
+import { QueryClient, useMutation, useQuery, type UseMutateFunction, type UseQueryResult } from "@tanstack/react-query";
 
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-}
-
-export default function useTask(): UseQueryResult<Task[], Error> {
+export default function seeTasks(): UseQueryResult<Task[], Error> {
   return useQuery({ 
     queryKey: ['tasks'], 
     queryFn: () => taskAPI.getTasks() 
+  })
+}
+
+export function addTask() {
+  const queryClient = new QueryClient() 
+  return useMutation({
+    mutationFn: (newTask: NewTask) => taskAPI.postTask(newTask.title, newTask.description),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+      console.log('Success:', data)
+    },
+    onError: (error) => {
+      // Handle Errors
+      console.error('Error creating task', error)
+    }
   })
 }
