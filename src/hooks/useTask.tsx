@@ -13,13 +13,25 @@ export function addTask() {
   const queryClient = new QueryClient() 
   return useMutation({
     mutationFn: (newTask: NewTask) => taskAPI.postTask(newTask.title, newTask.description),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] })
-      console.log('Success:', data)
     },
     onError: (error) => {
       // Handle Errors
       console.error('Error creating task', error)
+    }
+  })
+}
+
+export function removeTask() {
+  const queryClient = new QueryClient()
+  return useMutation({
+    mutationFn: (taskId: number) => taskAPI.deleteTask(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    },
+    onError: (error) => {
+      console.error("Error deleting task", error)
     }
   })
 }

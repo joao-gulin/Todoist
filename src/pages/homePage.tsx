@@ -19,7 +19,7 @@ import { toast } from "sonner"
 
 export default function HomePage() {
   const { data = [], error, isLoading } = seeTasks()
-  const { mutate } = addTask()
+  const { mutate: addNewTask } = addTask()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [open, setOpen] = useState(false)
@@ -44,7 +44,7 @@ export default function HomePage() {
         title: title,
         description: description
       }
-      mutate(newTask)
+      addNewTask(newTask)
       setOpen(false)
       setTitle('')
       setDescription('')
