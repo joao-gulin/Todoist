@@ -2,7 +2,7 @@ import taskAPI from "@/api/task"
 import DataTable from "@/components/dataTable"
 import { Button } from "@/components/ui/button"
 import useTask from "@/hooks/useTask"
-import { useMutation } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { CirclePlus } from 'lucide-react'
 import { NewTask } from "@/api/types"
 import {
@@ -19,13 +19,16 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 
 export default function HomePage() {
+  const queryClient = useQueryClient()
   const { data = [], error, isLoading } = useTask()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [open, setOpen] = useState(false)
   const mutation = useMutation({
     mutationFn: (newTask: NewTask) => taskAPI.postTask(newTask.title, newTask.description),
     onSuccess: (data) => {
-      console.log('Task created successfully', data)
+      queryClient.invalidateQueries({ queryKey: ['tasks']})
+      setOpen(false)
     },
     onError: (error) => {
       // Handle errors
@@ -64,7 +67,7 @@ export default function HomePage() {
       <div className="p-6 max-w-4xl mx-auto">
         <div className="mb-2 mr-2">
           {/*Dialog Button Area for Adding Task*/}
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="cursor-pointer">
                 <CirclePlus /> Add Task 
@@ -102,7 +105,12 @@ export default function HomePage() {
                 </div> 
               </div>
               <DialogFooter>
-                <Button type="submit" className="cursor-pointer" onClick={handleSubmit}>Save changes</Button>
+                <Button type="submit" 
+                className="cursor-pointer" 
+                onClick={handleSubmit}
+                >
+                  Save changes
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
