@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "./ui/button"
-import { Trash2 } from "lucide-react"
+import { Check, Trash2 } from "lucide-react"
 import { removeTask } from "@/hooks/useTask"
 
 interface Tasks {
@@ -54,6 +54,14 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
               onClick={() => deleteTask(task.id)}
               >
                 <Trash2 />
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button
+                className="cursor-pointer bg-green-800 hover:bg-green-900"
+                variant="outline"
+              >
+               <Check /> 
               </Button>
             </TableCell>    
           </TableRow>         

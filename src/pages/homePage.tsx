@@ -103,7 +103,8 @@ export default function HomePage() {
                 </div> 
               </div>
               <DialogFooter>
-                <Button type="submit" 
+                <Button 
+                type="button" 
                 className="cursor-pointer" 
                 onClick={handleSubmit}
                 >

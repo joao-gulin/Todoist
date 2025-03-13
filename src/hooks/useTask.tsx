@@ -1,7 +1,7 @@
 import taskAPI from "@/api/task";
 import type { NewTask, Task } from "@/api/types";
-import { QueryClient, useMutation, useQuery, type UseMutateFunction, type UseQueryResult } from "@tanstack/react-query";
-const queryClient = new QueryClient() 
+import queryClient from "@/queryClient";
+import { useMutation, useQuery, type UseMutateFunction, type UseQueryResult } from "@tanstack/react-query";
 
 export default function seeTasks(): UseQueryResult<Task[], Error> {
   return useQuery({ 
