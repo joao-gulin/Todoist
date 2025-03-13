@@ -1,5 +1,5 @@
-import { API_CONFIG } from "./config";
 import axios from 'axios'
+import apiClient from './apiClient'
 
 interface Task {
   id: number
@@ -11,7 +11,7 @@ interface Task {
 class TaskAPI {
   async getTasks(): Promise<Task[]> {
     try {
-      const response = await axios.get<Task[]>('/task');
+      const response = await apiClient.get<Task[]>('/task');
       return response.data;
     } catch (error) {
       console.error('Error fetching tasks:', error);

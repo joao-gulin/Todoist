@@ -26,13 +26,12 @@ interface DataTableProps {
 const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
   return (
     <Table>
-      <TableCaption>A list of your tasks</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
+          <TableHead>ID</TableHead>
           <TableHead>Title</TableHead>
           <TableHead>Description</TableHead>
-          <TableHead className="text-right">Completed</TableHead>
+          <TableHead>Completed</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -41,7 +40,7 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
             <TableCell>{task.id}</TableCell>
             <TableCell>{task.title}</TableCell>
             <TableCell>{task.description}</TableCell>
-            <TableCell>{task.completed}</TableCell>    
+            <TableCell>{task.completed ? 'Yes' : 'No' }</TableCell>    
           </TableRow>         
         ))} 
       </TableBody>
