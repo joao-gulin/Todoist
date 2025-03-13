@@ -4,16 +4,14 @@ import React from "react"
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "./ui/button"
 import { Check, Trash2 } from "lucide-react"
-import { removeTask } from "@/hooks/useTask"
+import { completeTask, removeTask } from "@/hooks/useTask"
 
 interface Tasks {
   id: number,
@@ -28,6 +26,7 @@ interface DataTableProps {
 
 const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
   const { mutate: deleteTask} = removeTask()
+  const { mutate: completeTasks } = completeTask()
 
   return (
     <Table>
@@ -61,6 +60,7 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
                 type="button"
                 className="cursor-pointer bg-green-800 hover:bg-green-900"
                 variant="outline"
+                onClick={() => completeTasks(task.id)}
               >
                <Check /> 
               </Button>
