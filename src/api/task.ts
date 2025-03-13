@@ -34,6 +34,15 @@ class TaskAPI {
       throw error
     }
   }
+
+  async completeTask(taskId: number) {
+    try {
+      await apiClient.put(`/task/${taskId}`)
+    } catch (error) {
+      console.error('Error completing task:', error)
+      throw error
+    }
+  }
 }
 
 const taskAPI = new TaskAPI()

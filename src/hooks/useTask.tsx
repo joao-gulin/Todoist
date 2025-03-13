@@ -34,3 +34,15 @@ export function removeTask() {
     }
   })
 }
+
+export function completeTask() {
+  return useMutation({
+    mutationFn: (taskId: number) => taskAPI.completeTask(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    },
+    onError: (error) => {
+      console.error("Error deleting task", error)
+    }
+  })
+}

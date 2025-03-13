@@ -58,6 +58,7 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
             </TableCell>
             <TableCell>
               <Button
+                type="button"
                 className="cursor-pointer bg-green-800 hover:bg-green-900"
                 variant="outline"
               >
