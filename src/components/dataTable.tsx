@@ -12,6 +12,7 @@ import {
 import { Button } from "./ui/button"
 import { Check, Trash2 } from "lucide-react"
 import { completeTask, removeTask } from "@/hooks/useTask"
+import { toast } from "sonner"
 
 interface Tasks {
   id: number,
@@ -55,16 +56,21 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
                 <Trash2 />
               </Button>
             </TableCell>
-            <TableCell>
-              <Button
+            {!task.completed && (
+              <TableCell>
+                <Button
                 type="button"
-                className="cursor-pointer bg-green-800 hover:bg-green-900"
                 variant="outline"
-                onClick={() => completeTasks(task.id)}
-              >
-               <Check /> 
-              </Button>
-            </TableCell>    
+                className="cursor-pointer bg-green-800 hover:bg-green-900"
+                onClick={() => {
+                  completeTasks(task.id)
+                  toast.success("Task Completed!")
+                }}
+                >
+                  <Check />
+                </Button>
+              </TableCell>
+            )} 
           </TableRow>         
         ))} 
       </TableBody>
