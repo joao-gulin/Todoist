@@ -33,7 +33,6 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
           <TableHead>Title</TableHead>
           <TableHead>Description</TableHead>
           <TableHead>Completed</TableHead>
@@ -42,7 +41,6 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
       <TableBody>
         {tasks?.map((task) => (
           <TableRow key={task.id}>
-            <TableCell>{task.id}</TableCell>
             <TableCell>{task.title}</TableCell>
             <TableCell>{task.description}</TableCell>
             <TableCell>{task.completed ? 'Yes' : 'No' }</TableCell>
@@ -51,7 +49,27 @@ const DataTable: React.FC<DataTableProps> = ({ tasks = [] }) => {
               type="button"
               variant="destructive"
               className="cursor-pointer"
-              onClick={() => deleteTask(task.id)}
+              onClick={() => toast.warning("Warning", {
+                description: "Do you wish to delete this task?",
+                action: (
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="secondary"
+                      onClick={() => deleteTask(task.id)}
+                      className="cursor-pointer bg-green-800 hover:bg-green-900"
+                    >
+                      Yes
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => toast.dismiss()}
+                      className="cursor-pointer bg-red-800 hover:bg-red-900"
+                    >
+                      No
+                    </Button>
+                  </div>
+                )
+              })}
               >
                 <Trash2 />
               </Button>
