@@ -50,6 +50,7 @@ export function removeTask() {
     onMutate: async (taskId) => {
       await queryClient.cancelQueries({ queryKey: ['tasks'] })
       const previousTasks = queryClient.getQueryData<Task[]>(['tasks'])
+      // Does a filter to mimick the act of deleting from the table until it really gets deleted
       queryClient.setQueryData<Task[]>(['tasks'], (old = []) => 
         old.filter(task => task.id !== taskId)
       )
@@ -70,11 +71,22 @@ export function removeTask() {
 export function completeTask() {
   return useMutation({
     mutationFn: (taskId: number) => taskAPI.completeTask(taskId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    onMutate: async (taskId) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] })
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks'])
+      queryClient.setQueryData<Task[]>(['tasks'], (old = []) => 
+        old.map(task => task.id === taskId ? { ...task, completed: true} : task)
+      )
+      return { previousTasks }
     },
-    onError: (error) => {
+    onError: (error, taskId, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks)
+      }
       console.error("Error deleting task", error)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
     }
   })
 }
