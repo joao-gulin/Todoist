@@ -47,11 +47,22 @@ export function addTask() {
 export function removeTask() {
   return useMutation({
     mutationFn: (taskId: number) => taskAPI.deleteTask(taskId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    onMutate: async (taskId) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] })
+      const previousTasks = queryClient.getQueryData<Task[]>(['tasks'])
+      queryClient.setQueryData<Task[]>(['tasks'], (old = []) => 
+        old.filter(task => task.id !== taskId)
+      )
+      return { previousTasks }
     },
-    onError: (error) => {
+    onError: (error, taskId, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks)
+      }
       console.error("Error deleting task", error)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
     }
   })
 }
